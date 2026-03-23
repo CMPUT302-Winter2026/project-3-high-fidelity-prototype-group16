@@ -1,10 +1,10 @@
 <script lang="ts">
     import { isEnglishWord } from "$lib/assets/content/englishWords";
-    import { seeDefinitions } from "$lib/components/word_def_item/dummyData";
+    import { seeDefinitions } from "$lib/assets/content/dummyData.js";
     import WordDefinitionItem from "$lib/components/word_def_item/WordDefinitionItem.svelte";
     import { error } from "@sveltejs/kit";
 
-    let { params } = $props();
+    let { params, data } = $props();
 
     if (!isEnglishWord(params.word)) {
         error(404, { message: `Word not found: ${params.word}` });

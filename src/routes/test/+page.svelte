@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { testCreeWordDef } from "$lib/components/word_def_item/dummyData";
+    import { testCreeWordDef } from "$lib/assets/content/dummyData";
     import WordDefinitionItem from "$lib/components/word_def_item/WordDefinitionItem.svelte";
 
     // Code

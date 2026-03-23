@@ -12,6 +12,7 @@ export class Vector2 {
     static of(x: number, y: number) {
         return new Vector2(x, y);
     }
+    
 
     /**
      * returns the mid point between the 2 vectors.
@@ -185,6 +186,10 @@ export class Vector2 {
 
     toString() {
         return `Vector2(${this.x}, ${this.y})`
+    }
+
+    eq(v: Vector2) {
+        return this.x == v.x && this.y == v.y;
     }
 }
 

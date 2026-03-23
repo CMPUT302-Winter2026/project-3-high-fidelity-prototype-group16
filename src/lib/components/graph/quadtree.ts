@@ -2,11 +2,132 @@ import { AABB, Vector2 } from "$lib/components/graph/vector2";
 
 const QT_CAP = 4;
 
+const THETA = 0;
+
+export class BarnesHutQuadTree {
+    /**
+     * In Barnes-Hut, a region can only contain or not contain a point.
+     * If a region needs to have more than 1 point, split it.
+     *
+     * https://arborjs.org/docs/barnes-hut
+     * https://jheer.github.io/barnes-hut/
+     */
+    boundary: AABB;
+    point?: Vector2;
+
+    totalMass: number;
+    centerOfMass: Vector2;
+
+    NW?: BarnesHutQuadTree;
+    NE?: BarnesHutQuadTree;
+    SW?: BarnesHutQuadTree;
+    SE?: BarnesHutQuadTree;
+
+    constructor(boundary: AABB) {
+        this.boundary = boundary;
+        this.totalMass = 0;
+        this.centerOfMass = boundary.center;
+    }
+
+    static default() {
+        return new BarnesHutQuadTree(new AABB(Vector2.of(-5000, -5000), Vector2.of(5000, 5000)));
+    }
+
+
+    simulate(body: Vector2, callback: (centerOfMass: Vector2, mass: number) => void) {
+        // external node
+        if (this.point) {
+            if (this.point.eq(body)) {
+                return; // same body, no work needed
+            }
+
+            callback(this.point, 1);
+            return;
+        }
+
+        const sdRatio = this.boundary.width / (this.centerOfMass.distTo(body));
+
+        if (sdRatio < THETA) {
+            return callback(this.centerOfMass, this.totalMass);
+        }
+
+        if (this.NE) {
+            this.NW!.simulate(body, callback);
+            this.NE!.simulate(body, callback);
+            this.SW!.simulate(body, callback);
+            this.SE!.simulate(body, callback);
+        }
+    }
+
+    subdivide() {
+        const center = this.boundary.center;
+        const boundary = this.boundary;
+        this.NW = new BarnesHutQuadTree(new AABB(boundary.topleft.clone(), center.clone()));
+        this.NE = new BarnesHutQuadTree(new AABB(Vector2.of(center.x, boundary.top), Vector2.of(boundary.right, center.y)));
+        this.SW = new BarnesHutQuadTree(new AABB(Vector2.of(boundary.left, center.y), Vector2.of(center.x, boundary.bot)));
+        this.SE = new BarnesHutQuadTree(new AABB(center.clone(), boundary.botright.clone()));
+    }
+
+    insert(p: Vector2) {
+        if (!this.boundary.containsPoint(p)) {
+            return false;
+        }
+
+
+        // no body and internal
+        if (!this.point && !this.NE) {
+            this.point = p;
+            this.totalMass = 1;
+            this.centerOfMass = p.clone();
+            return true;
+        }
+
+        // internal with children
+        if (!this.point) {
+            // update center of mass
+            this.centerOfMass = this.centerOfMass.mul(this.totalMass).addi(p).divi(this.totalMass + 1);
+            this.totalMass += 1;
+
+            // recursively insert the actual point to children
+            if (this.NE!.insert(p)) return;
+            if (this.NW!.insert(p)) return;
+            if (this.SE!.insert(p)) return;
+            if (this.SW!.insert(p)) return;
+        }
+
+        // external node. Has a point => no children.
+        if (this.point && !this.NE) {
+            this.subdivide();
+
+            this.centerOfMass = this.centerOfMass.mul(this.totalMass).addi(p).divi(this.totalMass + 1);
+            this.totalMass += 1;
+
+            // use short circuiting, the first success stops evaluation.
+            this.NE!.insert(p) ||
+                this.NW!.insert(p) ||
+                this.SE!.insert(p) ||
+                this.SW!.insert(p);
+
+            this.NE!.insert(this.point) ||
+                this.NW!.insert(this.point) ||
+                this.SE!.insert(this.point) ||
+                this.SW!.insert(this.point);
+
+            this.point = undefined;
+            return true;
+        }
+
+        throw Error("This should never happen.");
+
+    }
+}
+
 class QuadTree {
     // https://en.wikipedia.org/wiki/Quadtree
 
     boundary: AABB;
     points: Vector2[] = [];
+
 
     NW?: QuadTree;
     NE?: QuadTree;

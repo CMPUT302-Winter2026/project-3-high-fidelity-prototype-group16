@@ -10,6 +10,10 @@
     let completeOptions = $derived(autoCompleteProvider(text));
     let showingOptions = $derived(text.length > 0);
 
+    $effect(() => {
+        console.log(text);
+    });
+
     function ItemSelected(key: string) {
         text = key;
     }

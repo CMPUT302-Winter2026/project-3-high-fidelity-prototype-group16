@@ -1,6 +1,5 @@
 <script lang="ts">
     import { englishWords } from "$lib/assets/content/englishWords";
-    import NavBar, { type NavItem } from "$lib/components/NavBar.svelte";
     import Search from "$lib/components/Search.svelte";
     import Fuse from "fuse.js";
 
@@ -9,7 +8,7 @@
         includeScore: true,
     });
 
-    let text: string = "";
+    let text: string = $state("");
 </script>
 
 <div class="mainLayout">
@@ -41,7 +40,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-
     }
 
     h3 {
