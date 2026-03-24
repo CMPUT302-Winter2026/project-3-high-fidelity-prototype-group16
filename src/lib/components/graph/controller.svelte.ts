@@ -99,9 +99,8 @@ export class GraphController {
         })
 
 
-
         this.container?.addEventListener("pointermove", (e) => {
-            // console.log(e.movementX, e.movementY, e.buttons);
+            console.log(e.movementX, e.movementY, e.buttons, e.);
 
             if (e.buttons != 1) {
                 return;

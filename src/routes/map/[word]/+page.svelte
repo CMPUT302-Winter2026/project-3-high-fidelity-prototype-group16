@@ -1,40 +1,39 @@
 <script lang="ts" module>
-    export interface WordConnection {
+    export interface WordConnectionItem {
         primaryText: string;
         secondaryText: string;
 
         description: string[];
-
-        connections: WordConnection[];
     }
 
-    type WordGraphDesc = Omit<WordConnection, "connections">;
+    type WordGraphDesc = Omit<WordConnectionItem, "connections">;
 </script>
 
 <script lang="ts">
-    import { dummyCreeData } from "$lib/assets/content/dummyData";
     import { SimObj, simulate } from "$lib/components/graph/simulations.svelte";
     import { Vector2 } from "$lib/components/graph/vector2";
-    import { onDestroy, onMount, untrack } from "svelte";
+    import {  untrack } from "svelte";
 
     import type { PageProps } from "./$types";
-    import { ManualReactiveMap } from "$lib/components/graph/utils";
+
     import { GraphController } from "$lib/components/graph/controller.svelte";
+    import { creeWords } from "$lib/assets/content/dummyData";
+    import { error } from "@sveltejs/kit";
 
     let { params }: PageProps = $props();
 
-    const data = dummyCreeData;
 
-    const connections = new Map([
-        ["1", ["2", "3"]],
-        ["3", ["4"]],
-    ]);
 
     let container = $state<HTMLElement>();
     let controller = new GraphController();
 
     $effect(() => {
         if (container !== undefined) {
+
+            if (!(params.word in creeWords)){
+                // error(404, {message:`Word ${params.word} is not found.`})
+            }
+
             // debug
             const a = new SimObj(Vector2.ZERO, Vector2.ZERO, 50, "1", 1);
             const b = new SimObj(Vector2.ZERO, Vector2.ZERO, 50, "2", 1);

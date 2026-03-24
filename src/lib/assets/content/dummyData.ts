@@ -1,5 +1,5 @@
 import type { WordDef } from "$lib/components/word_def_item/WordDefinitionItem.svelte";
-import type { WordConnection } from "../../../routes/map/[word]/+page.svelte";
+import type { WordConnectionItem } from "../../../routes/map/[word]/+page.svelte";
 
 export const testCreeWordDef: WordDef = {
     primaryText: "nipâw",
@@ -63,120 +63,37 @@ export const seeDefinitions: WordDef[] = [
     }
 ];
 
-
-export const dummyCreeData: WordConnection[] = [
-    {
-        primaryText: "atāskēwin",
-        secondaryText: "work / a job",
+export const creeWords: Record<string, WordConnectionItem> = {
+    'Miyupimaatisiiun': {
+        primaryText: "Miyupimaatisiiun",
+        secondaryText: "The Good Life",
         description: [
-            "Refers to the act of working or a specific occupation.",
-            "Derived from the root 'atāskē-', meaning to work."
-        ],
-        connections: [
-            {
-                primaryText: "atāskēwak",
-                secondaryText: "they are working",
-                description: ["The plural present tense form of the verb."],
-                connections: []
-            },
-            {
-                primaryText: "atāskēwikamik",
-                secondaryText: "office / workplace",
-                description: ["Literally 'work-house'."],
-                connections: []
-            }
+            "A holistic concept of health and wellness.",
+            "Refers to living well physically, mentally, and spiritually.",
+            "The central goal of communal and individual balance."
         ]
     },
-    {
-        primaryText: "maskwa",
-        secondaryText: "bear",
+    'Wâhkôtowin': {
+        primaryText: "Wâhkôtowin",
+        secondaryText: "Kinship / Interconnectedness",
         description: [
-            "A black bear.",
-            "Often used in traditional storytelling and kinship terms."
-        ],
-        connections: [
-            {
-                primaryText: "maskosis",
-                secondaryText: "bear cub",
-                description: ["The diminutive form, adding '-is' to the end."],
-                connections: []
-            },
-            {
-                primaryText: "maskwamiy",
-                secondaryText: "ice",
-                description: [
-                    "A phonetic relative, though the cultural connection involves the bear's hibernation cycle."
-                ],
-                connections: []
-            }
+            "The law of relations that governs how we treat one another.",
+            "Extends beyond humans to animals, plants, and the spirit world.",
+            "The foundational 'glue' of Cree social structure."
         ]
     },
-    {
-        primaryText: "mīcisowin",
-        secondaryText: "food / the act of eating",
+    'Nîhithawîwin': {
+        primaryText: "Nîhithawîwin",
+        secondaryText: "The Cree Way / Language",
         description: [
-            "A general term for nourishment.",
-            "Central to community gatherings."
-        ],
-        connections: [
-            {
-                primaryText: "mīcisowikamik",
-                secondaryText: "restaurant / dining hall",
-                description: ["Literally 'eating-house'."],
-                connections: []
-            },
-            {
-                primaryText: "mīciwinis",
-                secondaryText: "snack",
-                description: ["Small or light food item."],
-                connections: []
-            }
-        ]
-    },
-    {
-        primaryText: "nîpisiy",
-        secondaryText: "willow",
-        description: [
-            "A flexible tree or shrub often found near water.",
-            "Used traditionally for making baskets and medicinal tea."
-        ],
-        connections: [
-            {
-                primaryText: "nîpiy",
-                secondaryText: "water",
-                description: [
-                    "The essential element for life.",
-                    "Often found where nîpisiy grows."
-                ],
-                connections: [
-                    {
-                        primaryText: "maskikiy",
-                        secondaryText: "medicine",
-                        description: [
-                            "Traditional healing substances derived from the land.",
-                            "Many medicines are prepared by boiling plants in water."
-                        ],
-                        connections: [] // 2nd degree from nîpisiy
-                    }
-                ]
-            },
-            {
-                primaryText: "mitis",
-                secondaryText: "tree",
-                description: [
-                    "A general term for a tree or piece of wood."
-                ],
-                connections: [
-                    {
-                        primaryText: "sakâw",
-                        secondaryText: "forest / wooded area",
-                        description: [
-                            "An area thick with trees."
-                        ],
-                        connections: [] // 2nd degree from nîpisiy
-                    }
-                ]
-            }
+            "Literally refers to the act of speaking Cree or the Cree identity.",
+            "Language is seen as the vessel for carrying culture and land-based knowledge."
         ]
     }
-];
+};
+
+export const dummyConnections: Record<string, string[]> = {
+    "Miyupimaatisiiun": ["Wâhkôtowin", "Nîhithawîwin"],
+    "Wâhkôtowin": ["Miyupimaatisiiun", "Kisemanitôw"],
+    "Nîhithawîwin": ["Miyupimaatisiiun"]
+};
