@@ -42,5 +42,6 @@ export interface EnglishWord {
     descriptions: string[];
 
     // cree words that are related to meanings of this English word
+    // must match the "primaryText" of a CreeWord.
     creeWords: string[];
 }
