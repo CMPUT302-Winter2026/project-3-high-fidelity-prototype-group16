@@ -143,11 +143,6 @@ export class GraphController {
             const dy = current.y - this.lastPoint.y;
 
             if (e.buttons != 1) {
-
-                if (e.buttons === 0 && e.target !== this.container) {
-                    const element = e.target as HTMLElement;
-                    this.setHover(element);
-                }
                 return;
             }
 
