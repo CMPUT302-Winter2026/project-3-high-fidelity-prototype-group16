@@ -10,6 +10,7 @@
 
 <div class="container">
     <button
+        type="button"
         class:selected={value === A}
         class="btn A"
         onclick={() => {
@@ -19,6 +20,7 @@
         {A}
     </button>
     <button
+        type="button"
         class:selected={value === B}
         class="btn B"
         onclick={() => {

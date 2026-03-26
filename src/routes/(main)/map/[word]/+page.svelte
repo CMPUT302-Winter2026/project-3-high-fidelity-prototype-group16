@@ -11,6 +11,8 @@
     import { GraphController } from "$lib/components/graph/controller.svelte";
     import { CreeWordConnections } from "$lib/assets/content/wordConnections";
     import { creeWords } from "$lib/assets/content/itwewinaScrapedDictionary";
+    import { CreeFormatTranslate } from "$lib/assets/cree_util/cree_format_translate";
+    import { UserPref } from "$lib/assets/shared_states/userPref.svelte";
 
     let { params, data }: PageProps = $props();
 
@@ -99,7 +101,7 @@
             {@const word = creeWords[id] || { descriptions: [], primaryText: "Missing lol" }}
             <div {id} class="square" style="--x: {item.x - cam.x}px; --y: {item.y - cam.y}px;">
                 <span class="primary" draggable="false">
-                    {word.primaryText}
+                    {CreeFormatTranslate(word.primaryText, {...UserPref})}
                 </span>
 
                 <span class="secondary" draggable="false">

@@ -1,10 +1,14 @@
 <script lang="ts">
+    import type { Snippet } from "svelte";
+
     interface Props {
         text?: string;
         autoCompleteProvider: (key: string) => string[];
         style?: string;
         onsubmit?: () => void;
         autoSubmit?: boolean;
+        noResTemplate?: Snippet;
+        focused?: boolean;
     }
 
     let {
@@ -13,10 +17,12 @@
         onsubmit = () => {},
         style,
         autoSubmit = true,
+        noResTemplate,
+        focused = $bindable(false),
     }: Props = $props();
 
     let completeOptions = $derived(autoCompleteProvider(text));
-    let focused = $state(false);
+
     let showingOptions = $derived(text.length > 0 && focused);
     let searchContent = $state<HTMLDivElement>();
 
@@ -29,21 +35,13 @@
     }
 </script>
 
-<form
-    class="wrapper"
-    class:displayContent={showingOptions}
-    {style}
-    onsubmit={(e) => {
-        e.preventDefault();
-        onsubmit();
-    }}
->
+<div class="wrapper" class:displayContent={showingOptions} {style}>
     <input
         placeholder="Search ..."
         type="search"
         bind:value={text}
-        onsubmit={() => {
-            onsubmit();
+        onkeypress={(e) => {
+            if (e.key === "enter") onsubmit();
         }}
         onfocus={() => {
             focused = true;
@@ -73,11 +71,15 @@
                     {item}
                 </button>
             {/each}
+
+            {#if noResTemplate}
+                {@render noResTemplate()}
+            {/if}
         </div>
     {/if}
 
     <img class="icon" src="/icons/search.svg" alt="" />
-</form>
+</div>
 
 <style>
     .wrapper {
@@ -103,6 +105,7 @@
     }
 
     .searchContent {
+        background-color: var(--white);
         position: absolute;
         z-index: 1000;
 
