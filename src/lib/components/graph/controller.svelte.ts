@@ -41,6 +41,7 @@ export class GraphController {
     startingFrame = -1;
 
     alpha = $state(0);
+    zoom = $state(1);
 
     constructor() {
 
@@ -121,6 +122,11 @@ export class GraphController {
 
 
     initEvents() {
+        this.container?.addEventListener("wheel", (e) => {
+            e.preventDefault();
+            this.zoom = Math.min(3, Math.max(0.25, this.zoom - e.deltaY * 0.001));
+        }, { passive: false });
+
         this.container?.addEventListener("pointerdown", (e) => {
             this.lastPoint = Vector2.of(e.screenX, e.screenY);
             if (e.target == this.container) {

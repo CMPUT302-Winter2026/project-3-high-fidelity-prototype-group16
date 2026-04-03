@@ -33,11 +33,14 @@
 		>
 			<img src="/icons/translate.svg" alt="SRO/Cree Syllabic toggle" />
 		</button>
-		<select name="Dialect Switcher" id="dialect" bind:value={dialect}>
-			{#each CreeDialects as d}
-				<option> {d}</option>
-			{/each}
-		</select>
+		<div class="dialectWrapper">
+			<label for="dialect">Dialects</label>
+			<select name="Dialect Switcher" id="dialect" bind:value={dialect}>
+				{#each CreeDialects as d}
+					<option> {d}</option>
+				{/each}
+			</select>
+		</div>
 	</div>
 </div>
 
@@ -82,6 +85,18 @@
 	.langOpt {
 		margin-left: auto;
 		gap: 1rem;
+		align-items: flex-end;
+	}
+
+	.dialectWrapper {
+		display: flex;
+		flex-direction: column;
+		gap: 0.2rem;
+	}
+
+	.dialectWrapper label {
+		font-size: small;
+		font-weight: 600;
 	}
 
 	.defContainer {

@@ -34,12 +34,6 @@
         >
             <img src="/icons/translate.svg" alt="SRO/Cree Syllabic toggle" />
         </button>
-        <select name="Dialect Switcher" id="dialect" bind:value={dialect}>
-            {#each CreeDialects as d}
-                <option> {d}</option>
-            {/each}
-        </select>
-
         <button
             class="iconBtn"
             onclick={() => {
@@ -55,6 +49,14 @@
             <img src="/icons/photo.svg" alt=" icon button" />
         </button>
     </div>
+    <div class="dialectWrapper">
+        <label for="dialect">Dialects</label>
+        <select name="Dialect Switcher" id="dialect" bind:value={dialect}>
+            {#each CreeDialects as d}
+                <option> {d}</option>
+            {/each}
+        </select>
+    </div>
 </div>
 
 <div class="content">
@@ -66,7 +68,7 @@
 
     <a href="/map/{word.primaryText}">
         <button class="semantic">
-            <img src="/icons/map.svg" alt="" /> Semantics-Linked Words
+            <img src="/icons/map.svg" alt="" /> View related words map
         </button>
     </a>
 </div>
@@ -96,8 +98,6 @@
         align-items: start;
 
         padding: 0rem 2rem;
-
-        flex-wrap: wrap;
     }
 
     .toolButtons {
@@ -106,6 +106,17 @@
         gap: 0.25rem;
         flex-wrap: wrap;
         align-items: center;
+    }
+
+    .dialectWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+
+    .dialectWrapper label {
+        font-size: small;
+        font-weight: 600;
     }
 
     .content {

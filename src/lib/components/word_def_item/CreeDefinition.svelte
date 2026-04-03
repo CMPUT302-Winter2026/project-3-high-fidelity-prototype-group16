@@ -16,77 +16,60 @@
 </script>
 
 <div class="container" class:cree={UserPref.format === "Syllabics"}>
-	<div class="hor">
-		<div class="ver">
-			<div class="hor" style="gap:1rem; align-items: center;">
-				<span class="title">
-					{index}.
-					{CreeFormatTranslate(creeWord.primaryText, {
-						...UserPref,
-					})}
-				</span>
+	<!-- title: full width so long words never compete with icons -->
+	<span class="title">
+		{index}. {CreeFormatTranslate(creeWord.primaryText, { ...UserPref })}
+	</span>
 
-				<span class="wordType">
-					[{creeWord.wordType}]
-				</span>
-				<!-- end title row -->
-			</div>
-
-			<div class="ver description">
-				<!-- description -->
-				<ul>
-					{#each creeWord.descriptions as desc}
-						<li>{desc}</li>
-					{/each}
-				</ul>
-				<!-- end description -->
-			</div>
-
-			<a href="/map/{creeWord.primaryText}">
-				<button class="semantic">
-					<img src="/icons/map.svg" alt="" /> Semantics
-				</button>
-			</a>
-		</div>
-
-		<div class="ver sideBtns">
-			<!-- side buttons -->
+	<!-- meta row: word type left, icons right -->
+	<div class="metaRow">
+		<span class="wordType">[{creeWord.wordType}]</span>
+		<div class="iconRow">
 			<button
 				class="iconBtn"
-				onclick={() => {
-					alert(
-						`Mock audio playback, Chosen dialect: ${dialect}, chosen word ${creeWord.primaryText}`,
-					);
-				}}
+				onclick={() => alert(`Mock audio playback, Chosen dialect: ${dialect}, chosen word ${creeWord.primaryText}`)}
 			>
-				<img src="/icons/speaker.svg" alt="speaker icon button" />
+				<img src="/icons/speaker.svg" alt="speaker" />
 			</button>
 			<button class="iconBtn">
-				<img src="/icons/photo.svg" alt=" icon button" />
+				<img src="/icons/photo.svg" alt="" />
 			</button>
-			<button
-				class="iconBtn chevronBtn"
-				onclick={() => {
-					showDetail = !showDetail;
-				}}
-				aria-label={showDetail ? "collapse details" : "expand details"}
-			>
-				<svg
-					class="chevron"
-					class:open={showDetail}
-					xmlns="http://www.w3.org/2000/svg"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2.5"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				>
-					<polyline points="6 9 12 15 18 9"></polyline>
-				</svg>
-			</button>
-			<!-- end side buttons -->
 		</div>
+	</div>
+
+	<ul>
+		{#each creeWord.descriptions as desc}
+			<li>{desc}</li>
+		{/each}
+	</ul>
+
+	<!-- actions row: both buttons sit together, wrap if needed -->
+	<div class="actions">
+		<a href="/map/{creeWord.primaryText}">
+			<button class="semantic">
+				<img src="/icons/map.svg" alt="" /> View related words map
+			</button>
+		</a>
+		<button
+			class="detailToggleBtn"
+			onclick={() => { showDetail = !showDetail; }}
+			aria-expanded={showDetail}
+		>
+			{showDetail ? "Hide word details" : "See word details"}
+			<svg
+				class="chevron"
+				class:open={showDetail}
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2.5"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<polyline points="6 9 12 15 18 9"></polyline>
+			</svg>
+		</button>
 	</div>
 
 	<!-- <h2 bind:clientHeight={contentHeight}>Tester</h2> -->
@@ -125,15 +108,35 @@
 
 	.title {
 		font-size: larger;
+		display: block;
+	}
+
+	.metaRow {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		margin-top: 0.25rem;
 	}
 
 	.wordType {
 		font-size: smaller;
+		color: var(--grey);
 	}
 
-	.sideBtns {
-		margin-left: auto;
+	.iconRow {
+		display: flex;
+		flex-direction: row;
 		gap: 0.25rem;
+	}
+
+	.actions {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		margin-top: 0.25rem;
 	}
 
 	.divider {
@@ -199,10 +202,22 @@
 		height: 1.75rem;
 	}
 
+	.detailToggleBtn {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		font-size: small;
+		width: fit-content;
+		height: fit-content;
+		padding: 0.2rem 0.4rem;
+		white-space: nowrap;
+	}
+
 	.chevron {
-		width: 1.25rem;
-		height: 1.25rem;
+		width: 1rem;
+		height: 1rem;
 		transition: transform 200ms ease-out;
+		flex-shrink: 0;
 	}
 
 	.chevron.open {

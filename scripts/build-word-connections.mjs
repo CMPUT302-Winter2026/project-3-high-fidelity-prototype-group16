@@ -21,7 +21,7 @@ const creeOnly = DICT.split("export const itwewinaEnglishWords")[0];
 // - JSON-ish: "primaryText": "mîci..."
 // - TS object: primaryText: "mîci..."
 const valid = new Set(
-	[...creeOnly.matchAll(/primaryText\s*:\s*"([^"]+)"/g)].map((m) => m[1]),
+	[...creeOnly.matchAll(/primaryText"?\s*:\s*"([^"]+)"/g)].map((m) => m[1]),
 );
 
 /** @type {string[][]} Thematic groups for dummy semantic map edges */
@@ -76,6 +76,30 @@ const CLUSTERS = [
 	["waniskâw", "awasi-wâpahki", "awasi-tipiskâki", "kisîkotêw"],
 	["ati-", "maci-", "pê-", "apihci-", "nah", "ohci"],
 	["pîhtaw", "pîhtokamik", "itâpiw", "itâpatisiw", "nîkân"],
+
+	// Animals
+	["pisiskiw", "pakwâci-pisiskiw", "atim", "acimosis", "minôs", "minôsis", "pôsîs", "mahkêsiw-wanihikan"],
+
+	// Eating / cooking
+	["mîcisow", "minihkwêw", "piminawasow", "kîsiswêw", "nôhtêhkatêw", "kinosêwipimiy", "âpihtâ-kîsikani-mîcisow"],
+
+	// Movement / travel
+	["sipwêhtêw", "kîwêw", "papâmohtêw", "kwâskohtiw", "sipwêpahtâw", "takopahtâw", "nakîw", "nîhtaciwêw"],
+
+	// Emotions
+	["sâkihitowin", "môcikisiw", "cîhkêêihtamowin", "pakwâtitowak", "sâkihiwêw", "miêwêêihtam"],
+
+	// Speech / communication
+	["pîkiskwêw", "ayamiw", "kakwêcihkêmow", "atotêw", "nikamow", "mâtow", "pâhpiw"],
+
+	// Hunting / fishing
+	["nôcihêw", "nôcikinosêwêw", "mâcîw", "nipahêw", "tasôhisow", "nôcihcikêsiw"],
+
+	// Prayer / spirituality
+	["ayamihâw", "kâkîsimow", "mawimoscikêwin", "maskihkiy", "kanâtisiw"],
+
+	// Weather
+	["kimiwan", "kôna", "yôtin", "mispon", "tahkipêw", "kisîkotêw"],
 ];
 
 /** Target batch size for "fill in the gaps" connections */
@@ -94,16 +118,28 @@ function vet(w) {
 	return valid.has(w);
 }
 
+/**
+ * Ring neighbourhood size for named clusters.
+ * K=2 gives each word ~4 neighbours (2 on each side) instead of N-1,
+ * so the graph fan-outs into a proper branching tree rather than a star.
+ */
+const CLUSTER_RING_K = 2;
+
 /** @type {Record<string, string[]>} */
 const conn = {};
 for (const cluster of CLUSTERS) {
 	const words = [...new Set(cluster)].filter(vet);
 	if (words.length < 2) continue;
-	for (const w of words) {
-		for (const o of words) {
-			if (o === w) continue;
-			if (!conn[w]) conn[w] = [];
-			if (!conn[w].includes(o)) conn[w].push(o);
+	const N = words.length;
+	const k = Math.min(CLUSTER_RING_K, Math.floor((N - 1) / 2));
+	for (let i = 0; i < N; i++) {
+		const w = words[i];
+		if (!conn[w]) conn[w] = [];
+		for (let t = 1; t <= k; t++) {
+			const jPlus = words[(i + t) % N];
+			const jMinus = words[(i - t + N) % N];
+			if (!conn[w].includes(jPlus)) conn[w].push(jPlus);
+			if (!conn[w].includes(jMinus)) conn[w].push(jMinus);
 		}
 	}
 }

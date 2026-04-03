@@ -53,11 +53,11 @@
                                 connection,
                                 1,
                             );
+                            untrack(() => {
+                                controller.insertItem(wordObjMap[connection], rootObj);
+                            });
+                            queue.push(connection);
                         }
-                        untrack(() => {
-                            controller.insertItem(wordObjMap[connection], rootObj);
-                        });
-                        queue.push(connection);
                     }
                 }
                 degreeOfSep -= 1;
@@ -86,6 +86,7 @@
             α: {controller.alpha.toFixed(5)})</span
         >
 
+        <div class="zoomLayer" style="transform: scale({controller.zoom}); transform-origin: 50% 50%;">
         {#each Object.entries(controller.lines) as [id, line] (id)}
             <div
                 class="line"
@@ -120,10 +121,21 @@
                 </a>
             </div>
         {/each}
+        </div>
     {/if}
 </div>
 
 <style>
+    .zoomLayer {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+    }
+
+    .zoomLayer > :global(*) {
+        pointer-events: all;
+    }
+
     .locationLabel {
         position: absolute;
         left: 2rem;
@@ -190,9 +202,6 @@
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
-        .primary {
-        }
-
         .secondary {
             font-weight: lighter;
             font-size: small;
