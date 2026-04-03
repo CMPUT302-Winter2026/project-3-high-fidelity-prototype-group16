@@ -65,16 +65,25 @@
 				<img src="/icons/photo.svg" alt=" icon button" />
 			</button>
 			<button
-				class="iconBtn"
+				class="iconBtn chevronBtn"
 				onclick={() => {
 					showDetail = !showDetail;
 				}}
+				aria-label={showDetail ? "collapse details" : "expand details"}
 			>
-				{#if !showDetail}
-					<img src="/icons/plus.svg" alt="press to show more info" />
-				{:else}
-					<img src="/icons/minus.svg" alt="press to hide more info" />
-				{/if}
+				<svg
+					class="chevron"
+					class:open={showDetail}
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2.5"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<polyline points="6 9 12 15 18 9"></polyline>
+				</svg>
 			</button>
 			<!-- end side buttons -->
 		</div>
@@ -188,6 +197,16 @@
 	button.iconBtn {
 		width: 1.75rem;
 		height: 1.75rem;
+	}
+
+	.chevron {
+		width: 1.25rem;
+		height: 1.25rem;
+		transition: transform 200ms ease-out;
+	}
+
+	.chevron.open {
+		transform: rotate(180deg);
 	}
 
 	ul {

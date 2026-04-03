@@ -243,7 +243,7 @@ export class GraphController {
 
     insertItem(obj: SimObj, parent?: SimObj) {
         if (this.objs.has(obj.id)) {
-            console.log(`Id conflict : ${obj.id}. Ignoring the entry.`, this.objs);
+            return; // node already has a parent, keep it as-is
         } else {
 
 
