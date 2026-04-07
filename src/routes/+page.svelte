@@ -1,18 +1,11 @@
 <script lang="ts">
-    import { englishWords } from "$lib/assets/content/englishWords";
     import CreeSearchComp from "$lib/components/CreeSearchComp.svelte";
-    import Fuse from "fuse.js";
-
-    const fuse = new Fuse(englishWords, {
-        keys: ["text"],
-        includeScore: true,
-    });
 
     let text: string = $state("");
 </script>
 
 <div class="mainLayout">
-    <h1>Better Itwêwina</h1>
+    <h1>Vocab Explorer</h1>
     <CreeSearchComp />
 
     {#if !text}
