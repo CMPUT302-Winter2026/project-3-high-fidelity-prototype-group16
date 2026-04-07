@@ -13,10 +13,10 @@
 
 <div class="mainLayout">
     <h1>Better Itwêwina</h1>
-    <CreeSearchComp/>
+    <CreeSearchComp />
 
     {#if !text}
-        <h3>Search searching to get started!</h3>
+        <h3>Type an English or Cree word to get started!</h3>
     {/if}
 </div>
 
@@ -26,13 +26,13 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+
+        padding: 3rem;
+        padding-top: 5rem;
     }
 
     h3 {
-        color: var(--grey);
+        text-align: center;
+        width: 80%;
     }
-    .mispell {
-        text-decoration: red underline wavy;
-    }
-
 </style>

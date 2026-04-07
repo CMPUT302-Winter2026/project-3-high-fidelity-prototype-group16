@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { creeWords, englishWords } from "$lib/assets/content/itwewinaScrapedDictionary";
+	import PushButton from "$lib/components/PushButton.svelte";
 	import Search from "$lib/components/Search.svelte";
 	import Fuse from "fuse.js";
 
@@ -17,14 +18,16 @@
 
 {#snippet Missing()}
 	<span style="padding: 0.5rem; font-size: smaller;"
-		>Report a missing word? <a href="/missing/report#{text}"
-			><button
+		>Report a missing word?
+		<a href="/missing/report#{text}">
+			<PushButton
 				onclick={() => {
 					focused = false;
-				}}>Report</button
-			></a
-		></span
-	>
+				}}
+				>Report
+			</PushButton>
+		</a>
+	</span>
 {/snippet}
 
 <Search

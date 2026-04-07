@@ -5,7 +5,7 @@
     import type { PageData, PageProps } from "./$types";
     import { bumpVote, getMissingWords } from "$lib/firebase/api";
     import ABToggle from "$lib/components/ABToggle.svelte";
-    import { goto } from "$app/navigation";
+    import PushButton from "$lib/components/PushButton.svelte";
 
     let { data }: PageProps = $props();
 
@@ -19,8 +19,6 @@
             threshold: 0.45,
         }),
     );
-
-    
 </script>
 
 <form
@@ -41,11 +39,11 @@
     />
 
     <div>
-        <label for="">Language</label>
+        <label for="">Language of the Word</label>
         <ABToggle A="English" B="Cree" bind:value={language} />
     </div>
 
-    <button type="submit">Submit!</button>
+    <PushButton type="submit">Submit!</PushButton>
 </form>
 
 <style>

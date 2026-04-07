@@ -36,30 +36,43 @@
         width: fit-content;
         min-width: 150px;
 
-        border-radius: 5px;
-        border: 1px solid var(--black);
+        border-radius: 8px;
+        border: 2px solid var(--fg0);
 
         overflow: hidden;
     }
 
     .btn {
         flex: 1;
-        padding: 0.25rem;
+        padding: 0.5rem 0.75rem;
 
-        color: var(--black);
-        background-color: var(--white);
+        color: var(--fg0);
+        background-color: var(--bg0);
 
         border: none;
 
-        transition: all ease-out 200ms;
+        transition:
+            background-color 180ms ease-out,
+            color 180ms ease-out,
+            transform 120ms ease-out;
+    }
+
+    .btn:hover {
+        background-color: var(--bg1);
+        color: var(--fg1);
     }
 
     .A {
-        border-right: 1px solid var(--black);
+        border-right: 2px solid var(--fg0);
     }
 
     .selected {
-        color: var(--white);
-        background-color: var(--black);
+        color: var(--bg0);
+        background-color: var(--fg0);
+    }
+
+    .selected:hover {
+        color: var(--bg0);
+        background-color: var(--fg0);
     }
 </style>

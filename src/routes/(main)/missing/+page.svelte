@@ -7,7 +7,7 @@
 <div class="container">
     <h1>Missing Words</h1>
     {#each (await dataPromise).sort((a, b) => {
-        return a.votes - b.votes;
+        return -a.votes + b.votes;
     }) as item, index}
         <div class="missingItem">
             <span>Word: {item.id}</span>
@@ -26,6 +26,7 @@
         align-items: center;
 
         padding: 2rem;
+        padding-top: 0;
     }
 
     .missingItem {
@@ -37,5 +38,7 @@
         border-radius: 5px;
 
         padding: 1rem 1.5rem;
+
+        width: 100%;
     }
 </style>

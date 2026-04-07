@@ -21,14 +21,22 @@ body {
     --lightGrey: #d9dce2;
     --grey: #57585b;
 
+    --fg0: #313d22;
+    --fg1: #475931;
 
-    font-family: "CanadianSyllabic", sans-serif;
-    font-optical-sizing: auto;
-    font-style: normal;
-    font-variation-settings: "width" 100;
+    --bk: #fbfff8;
+    --bg0: #f3faed;
+    --bg1: #e2e0c3;
+
+    --hl0: #ffbc7b;
+    --hl: #e88760;
 
     min-height: 100dvh;
+    color: var(--fg0);
+}
 
+* {
+    font-family: "Marcellus", serif;
 
 }
 
@@ -49,7 +57,12 @@ a {
 }
 
 
-
+select {
+    background-color: var(--bg0);
+    border: 1px solid var(--fg0);
+    padding: 0.5rem;
+    border-radius: 8px;
+}
 
 .iconBtn {
     display: flex;
@@ -87,3 +100,7 @@ a {
     src: url("/font/NotoSansCanadianSyllabic_Regular.ttf");
 }
 
+@font-face {
+    font-family: Marcellus;
+    src: url("/font/Marcellus.woff2")
+}

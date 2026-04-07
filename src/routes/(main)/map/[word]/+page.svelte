@@ -13,6 +13,7 @@
     import { creeWords } from "$lib/assets/content/itwewinaScrapedDictionary";
     import { CreeFormatTranslate } from "$lib/assets/cree_util/cree_format_translate";
     import { UserPref } from "$lib/assets/shared_states/userPref.svelte";
+    import PushButton from "$lib/components/PushButton.svelte";
 
     let { params, data }: PageProps = $props();
 
@@ -124,7 +125,9 @@
                         {/each}
                     </div>
                     <a href="/def/{id}" draggable="false">
-                        <button>Read More</button>
+                        <PushButton>
+                            Read More
+                        </PushButton>
                     </a>
                 </div>
             {/each}
@@ -155,7 +158,7 @@
     }
 
     .line {
-        background-color: var(--black);
+        background-color: var(--fg1);
 
         height: 2px;
         width: var(--dist);
@@ -183,8 +186,10 @@
         touch-action: none;
 
         background-size: 50px 50px;
-        background-image: linear-gradient(to right, rgba(128, 128, 128, 0.326) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(128, 128, 128, 0.329) 1px, transparent 1px);
+        background-image: linear-gradient(to right, var(--bg1) 1px, transparent 1px),
+            linear-gradient(to bottom, var(--bg1) 1px, transparent 1px);
+
+        border-top: 2px solid var(--fg1);
     }
     .square {
         position: absolute;
@@ -196,13 +201,12 @@
         min-width: 50px;
         max-width: 200px;
         min-height: 2rem;
-        background-color: var(--white);
+        background-color: var(--bg0);
 
         user-select: none;
         z-index: 10;
 
-        color: var(--black);
-        border: 2px solid var(--black);
+        border: 2px solid var(--fg0);
         border-radius: 5px;
         padding: 0.5rem;
 

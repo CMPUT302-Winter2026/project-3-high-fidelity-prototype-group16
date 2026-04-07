@@ -6,6 +6,8 @@
         UserPref,
         type CreeDialect,
     } from "$lib/assets/shared_states/userPref.svelte";
+    import IconButton from "$lib/components/IconButton.svelte";
+    import PushButton from "$lib/components/PushButton.svelte";
 
     interface Props {
         word: CreeWord;
@@ -22,8 +24,15 @@
         {word.wordType} ({word.detailedWordType})
     </span>
     <div class="toolButtons">
-        <button
-            class="iconBtn"
+        <div class="dialectWrapper">
+            <label for="dialect">Dialects</label>
+            <select name="Dialect Switcher" id="dialect" bind:value={dialect}>
+                {#each CreeDialects as d}
+                    <option> {d}</option>
+                {/each}
+            </select>
+        </div>
+        <IconButton
             onclick={() => {
                 if (UserPref.format == "SRO") {
                     UserPref.format = "Syllabics";
@@ -33,9 +42,8 @@
             }}
         >
             <img src="/icons/translate.svg" alt="SRO/Cree Syllabic toggle" />
-        </button>
-        <button
-            class="iconBtn"
+        </IconButton>
+        <IconButton
             onclick={() => {
                 alert(
                     `Mock audio playback, Chosen dialect: ${dialect}, chosen word ${word.primaryText}`,
@@ -43,19 +51,11 @@
             }}
         >
             <img src="/icons/speaker.svg" alt="speaker icon button" />
-        </button>
+        </IconButton>
 
-        <button class="iconBtn">
+        <IconButton class="iconBtn">
             <img src="/icons/photo.svg" alt=" icon button" />
-        </button>
-    </div>
-    <div class="dialectWrapper">
-        <label for="dialect">Dialects</label>
-        <select name="Dialect Switcher" id="dialect" bind:value={dialect}>
-            {#each CreeDialects as d}
-                <option> {d}</option>
-            {/each}
-        </select>
+        </IconButton>
     </div>
 </div>
 
@@ -67,9 +67,12 @@
     {/each}
 
     <a href="/map/{word.primaryText}">
-        <button class="semantic">
-            <img src="/icons/map.svg" alt="" /> View related words map
-        </button>
+        <PushButton>
+            {#snippet prefix()}
+                <img src="/icons/map.svg" alt="" style="width: 1.5rem;" />
+            {/snippet}
+            Related Words
+        </PushButton>
     </a>
 </div>
 
@@ -103,15 +106,19 @@
     .toolButtons {
         display: flex;
         flex-direction: row;
-        gap: 0.25rem;
+        gap: 0.5rem;
         flex-wrap: wrap;
-        align-items: center;
+        align-items: flex-end;
+
+        width: 100%;
     }
 
     .dialectWrapper {
         display: flex;
         flex-direction: column;
-        gap: 0.2rem;
+        gap: 0.25rem;
+
+        margin-right: auto;
     }
 
     .dialectWrapper label {

@@ -40,7 +40,7 @@
 
 		overflow-y: auto;
 
-		background-color: var(--white);
+		background-color: var(--bk);
 
 		display: flex;
 		flex-direction: column;

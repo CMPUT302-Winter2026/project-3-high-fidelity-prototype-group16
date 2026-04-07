@@ -86,26 +86,45 @@
         width: auto;
         position: relative;
 
-        background-color: var(--white);
-        border: 2px solid var(--black);
-        border-radius: 10px;
+        background-color: var(--bg0);
+        border: 2px solid var(--fg0);
+        border-radius: 8px;
+        color: var(--fg0);
         display: flex;
         flex-direction: row;
+
+        transition:
+            background-color 180ms ease-out,
+            border-color 180ms ease-out,
+            color 180ms ease-out;
     }
+
+    .wrapper:focus-within {
+        background-color: var(--bg1);
+        border-color: var(--fg1);
+        color: var(--fg1);
+    }
+
     .wrapper.displayContent {
-        border-radius: 10px 10px 0px 0px;
+        border-radius: 8px 8px 0 0;
     }
+
     input {
         width: 100%;
         padding: 0.5rem;
         outline: none;
         border: none;
         background-color: transparent;
-        border-radius: 10px;
+        color: inherit;
+        border-radius: 8px;
+    }
+
+    input::placeholder {
+        color: var(--fg1);
     }
 
     .searchContent {
-        background-color: var(--white);
+        background-color: var(--bg0);
         position: absolute;
         z-index: 1000;
 
@@ -118,25 +137,34 @@
         display: flex;
         flex-direction: column;
 
-        border: 2px solid;
+        border: 2px solid var(--fg0);
         border-top: none;
-        border-radius: 0 0 10px 10px;
+        border-radius: 0 0 8px 8px;
         overflow: hidden;
     }
 
     .searchItem {
         border: none;
-        background-color: var(--white);
-        border-bottom: 1px solid var(--black);
+        background-color: var(--bg0);
+        border-bottom: 1px solid var(--fg0);
+        color: var(--fg0);
         display: flex;
         justify-content: flex-start;
         padding: 0.5rem;
 
-        transition: filter 200ms ease-out;
+        transition:
+            background-color 180ms ease-out,
+            color 180ms ease-out;
     }
 
     .searchItem:hover {
-        filter: brightness(0.96);
+        background-color: var(--bg1);
+        color: var(--fg1);
+    }
+
+    .searchItem:active {
+        background-color: var(--fg0);
+        color: var(--bg0);
     }
 
     .searchItem:last-child {
@@ -145,11 +173,13 @@
 
     .noRes {
         padding: 0.5rem;
+        color: var(--fg1);
     }
 
     .icon {
         width: 1rem;
         height: auto;
         margin-right: 0.5rem;
+        opacity: 0.75;
     }
 </style>

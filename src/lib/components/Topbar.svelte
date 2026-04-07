@@ -2,29 +2,31 @@
 	import { UiStates } from "$lib/assets/shared_states/ui.svelte";
 	import { onMount } from "svelte";
 	import CreeSearchComp from "./CreeSearchComp.svelte";
+	import IconButton from "$lib/components/IconButton.svelte";
 </script>
 
 <div class="hor container" bind:clientHeight={UiStates.topbarHeight}>
-	<button
-		class="iconBtn"
+	<IconButton
 		onclick={() => {
 			history.back();
 		}}
 	>
 		<img src="/icons/back.svg" alt="" style="width: 1rem; height:auto;" />
-	</button>
-	<CreeSearchComp></CreeSearchComp>
-	<a href="/settings	">
-		<button class="iconBtn" style="width:2rem; height: 2rem;">
-			<img src="/icons/setting.svg" alt="settings button." />
-		</button></a
-	>
+	</IconButton>
 
-	<a href="/"
-		><button class="iconBtn" style="width:2rem; height: 2rem;"
-			><img src="/icons/home.svg" alt="Go home" /></button
-		></a
-	>
+	<CreeSearchComp></CreeSearchComp>
+
+	<a href="/settings	">
+		<IconButton>
+			<img src="/icons/setting.svg" alt="settings button." />
+		</IconButton>
+	</a>
+
+	<a href="/">
+		<IconButton>
+			<img src="/icons/home.svg" alt="Go home" />
+		</IconButton>
+	</a>
 </div>
 
 <style>
@@ -38,7 +40,7 @@
 		gap: 1rem;
 		padding: 2rem;
 
-		background-color: var(--white);
+		background-color: var(--bk);
 		z-index: 1000;
 	}
 </style>

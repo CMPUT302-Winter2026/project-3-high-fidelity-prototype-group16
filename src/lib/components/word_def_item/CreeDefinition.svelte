@@ -2,6 +2,8 @@
 	import type { CreeWord } from "$lib/assets/content/dummy/types";
 	import { CreeFormatTranslate } from "$lib/assets/cree_util/cree_format_translate";
 	import { UserPref } from "$lib/assets/shared_states/userPref.svelte";
+	import IconButton from "$lib/components/IconButton.svelte";
+	import PushButton from "$lib/components/PushButton.svelte";
 
 	interface Props {
 		index: number;
@@ -25,15 +27,17 @@
 	<div class="metaRow">
 		<span class="wordType">[{creeWord.wordType}]</span>
 		<div class="iconRow">
-			<button
-				class="iconBtn"
-				onclick={() => alert(`Mock audio playback, Chosen dialect: ${dialect}, chosen word ${creeWord.primaryText}`)}
+			<IconButton
+				onclick={() =>
+					alert(
+						`Mock audio playback, Chosen dialect: ${dialect}, chosen word ${creeWord.primaryText}`,
+					)}
 			>
 				<img src="/icons/speaker.svg" alt="speaker" />
-			</button>
-			<button class="iconBtn">
+			</IconButton>
+			<IconButton>
 				<img src="/icons/photo.svg" alt="" />
-			</button>
+			</IconButton>
 		</div>
 	</div>
 
@@ -46,33 +50,36 @@
 	<!-- actions row: both buttons sit together, wrap if needed -->
 	<div class="actions">
 		<a href="/map/{creeWord.primaryText}">
-			<button class="semantic">
-				<img src="/icons/map.svg" alt="" /> View related words map
-			</button>
+			<PushButton>
+				{#snippet prefix()}
+					<img src="/icons/map.svg" alt="" style="width: 1.5rem;" />
+				{/snippet}
+				Related Words
+			</PushButton>
 		</a>
-		<button
-			class="detailToggleBtn"
-			onclick={() => { showDetail = !showDetail; }}
-			aria-expanded={showDetail}
+		<PushButton
+			onclick={() => {
+				showDetail = !showDetail;
+			}}
 		>
-			{showDetail ? "Hide word details" : "See word details"}
-			<svg
-				class="chevron"
-				class:open={showDetail}
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2.5"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-			>
-				<polyline points="6 9 12 15 18 9"></polyline>
-			</svg>
-		</button>
+			Word Details
+			{#snippet postfix()}
+				<svg
+					class="chevron"
+					class:open={showDetail}
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2.5"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<polyline points="6 9 12 15 18 9"></polyline>
+				</svg>
+			{/snippet}
+		</PushButton>
 	</div>
-
-	<!-- <h2 bind:clientHeight={contentHeight}>Tester</h2> -->
 
 	<div class="detailContainer" style:--contentHeight={contentHeight} class:showDetail>
 		<div class="detailContent" bind:clientHeight={contentHeight}>
@@ -99,11 +106,16 @@
 
 	.container {
 		padding: 0.75rem;
-		border: 2px solid var(--black);
+		border: 2px solid var(--fg1);
+		background-color: var(--bg0);
 		border-radius: 6px;
 
 		width: 100%;
 		max-width: 350px;
+
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
 	}
 
 	.title {
@@ -137,12 +149,14 @@
 		align-items: center;
 		gap: 0.5rem;
 		margin-top: 0.25rem;
+
+		justify-content: space-between;
 	}
 
 	.divider {
 		width: auto;
 		height: 2px;
-		background-color: var(--black);
+		background-color: var(--fg0);
 		margin: 0.25rem 0;
 	}
 
@@ -218,10 +232,12 @@
 		height: 1rem;
 		transition: transform 200ms ease-out;
 		flex-shrink: 0;
+
+		transform: rotate(90deg);
 	}
 
 	.chevron.open {
-		transform: rotate(180deg);
+		transform: rotate(0deg);
 	}
 
 	ul {

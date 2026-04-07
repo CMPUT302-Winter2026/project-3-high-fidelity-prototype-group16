@@ -7,6 +7,7 @@
 		UserPref,
 		type CreeDialect,
 	} from "$lib/assets/shared_states/userPref.svelte";
+	import IconButton from "$lib/components/IconButton.svelte";
 	import CreeDefinition from "$lib/components/word_def_item/CreeDefinition.svelte";
 
 	interface Props {
@@ -21,8 +22,7 @@
 <div class="hor title" style="top: {UiStates.topbarHeight}px;" class:sticky>
 	<h1>{word.primaryText}</h1>
 	<div class="hor langOpt">
-		<button
-			class="iconBtn"
+		<IconButton
 			onclick={() => {
 				if (UserPref.format == "SRO") {
 					UserPref.format = "Syllabics";
@@ -32,7 +32,7 @@
 			}}
 		>
 			<img src="/icons/translate.svg" alt="SRO/Cree Syllabic toggle" />
-		</button>
+		</IconButton>
 		<div class="dialectWrapper">
 			<label for="dialect">Dialects</label>
 			<select name="Dialect Switcher" id="dialect" bind:value={dialect}>
@@ -43,11 +43,6 @@
 		</div>
 	</div>
 </div>
-
-
-
-
-
 
 <div class="ver defContainer">
 	{#each word.creeWords as creeWordId, index}
@@ -60,7 +55,7 @@
 
 <style>
 	.title.sticky {
-		border-color: var(--black);
+		border-color: var(--fg0);
 	}
 
 	h1 {
@@ -73,7 +68,7 @@
 
 		position: sticky;
 
-		background-color: var(--white);
+		background-color: var(--bk);
 
 		border-bottom: 2px solid transparent;
 		transition: border-color 200ms ease-out;

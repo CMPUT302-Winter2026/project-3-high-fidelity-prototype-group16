@@ -127,7 +127,22 @@ export class GraphController {
     initEvents() {
         this.container?.addEventListener("wheel", (e) => {
             e.preventDefault();
-            this.zoomAtPoint(Vector2.of(e.offsetX, e.offsetY), this.zoom - (this.zoom * Math.sign(e.deltaY) * 0.05));
+            if (e.ctrlKey) {
+                const rect = this.container?.getBoundingClientRect();
+                if (!rect) {
+                    return;
+                }
+
+                this.zoomAtPoint(
+                    Vector2.of(e.clientX - rect.left, e.clientY - rect.top),
+                    this.zoom - (this.zoom * Math.sign(e.deltaY) * 0.05)
+                );
+                return;
+            }
+
+            this.pan(Vector2.of(-e.deltaX, -e.deltaY));
+        }, {
+            passive: false
         });
 
         this.container?.addEventListener("mousedown", (e) => {
