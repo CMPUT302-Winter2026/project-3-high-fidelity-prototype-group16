@@ -1,3 +1,27 @@
+export function lerp(a: number, b: number, t: number) {
+    return a + t * (b - a);
+}
+
+export function smoothstep(a: number, b: number, t: number) {
+    return lerp(a, b, t * t * (3 - 2 * t));
+}
+
+/**
+ * convert point from global space to screen space.
+ */
+export function toScreenSpace(point: Vector2, camPos: Vector2, scale: number) {
+    return point.sub(camPos).mul(scale); // cam pos is not affected by scale
+}
+
+/**
+ * convert from screen space to global space
+ */
+export function toGlobalSpace(point: Vector2, camPos: Vector2, scale: number) {
+    return point.div(scale).add(camPos); // reverse operations done in toScreenSpace()
+}
+
+
+
 export class Vector2 {
 
     x: number;

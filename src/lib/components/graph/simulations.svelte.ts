@@ -4,8 +4,8 @@ import { BarnesHutQuadTree } from "$lib/components/graph/quadtree";
 import { Vector2 } from "$lib/components/graph/vector2";
 const SPRING = 0.2;
 const TARGET_DIST = 100; // minimum separation between connected nodes (beyond their radii)
-const REULSION_FORCE = 1000000; // coefficient to Coulomb's Law
-const DAMP = 0.75; // dampening factor, amount to reduce forces by each frame.
+const REULSION_FORCE = 500000; // coefficient to Coulomb's Law
+const DAMP = 0.92; // dampening factor, amount to reduce forces by each frame.
 
 
 export class SimObj {

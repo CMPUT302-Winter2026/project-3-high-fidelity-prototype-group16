@@ -21,7 +21,9 @@
 
     $effect(() => {
         if (container !== undefined) {
-            controller.init(container!);
+            untrack(() => {
+                controller.init(container!);
+            });
 
             const wordObjMap: Record<string, SimObj> = {};
 
@@ -76,7 +78,8 @@
 <div
     class="container"
     bind:this={container}
-    style="background-position: {-controller.camera.x}px {-controller.camera.y}px;"
+    style="background-position: {-controller.camera.x * controller.zoom}px {-controller.camera.y *
+        controller.zoom}px; background-size: {50 * controller.zoom}px {50 * controller.zoom}px; "
 >
     {#if controller}
         {@const cam = controller.camera}
@@ -86,41 +89,45 @@
             α: {controller.alpha.toFixed(5)})</span
         >
 
-        <div class="zoomLayer" style="transform: scale({controller.zoom}); transform-origin: 50% 50%;">
-        {#each Object.entries(controller.lines) as [id, line] (id)}
-            <div
-                class="line"
-                style="--x: {line.x - cam.x}px;
-                --y:{line.y - cam.y}px;
+        <div
+            class="zoomLayer"
+            style="transform: translate({-cam.x * controller.zoom}px, {-cam.y *
+                controller.zoom}px) scale({controller.zoom}); transform-origin: top left;"
+        >
+            {#each Object.entries(controller.lines) as [id, line] (id)}
+                <div
+                    class="line"
+                    style="--x: {line.x}px;
+                --y:{line.y}px;
                 --dist: {line.length}px;
                 --angle: {line.angle}deg;
                 "
-            ></div>
-        {/each}
+                ></div>
+            {/each}
 
-        {#each Object.entries(controller.items) as [id, item] (id)}
-            {@const word = creeWords[id] || { descriptions: [], primaryText: "Missing lol" }}
-            <div {id} class="square" style="--x: {item.x - cam.x}px; --y: {item.y - cam.y}px;">
-                <span class="primary" draggable="false">
-                    {CreeFormatTranslate(word.primaryText, {...UserPref})}
-                </span>
+            {#each Object.entries(controller.items) as [id, item] (id)}
+                {@const word = creeWords[id] || { descriptions: [], primaryText: "Missing lol" }}
+                <div {id} class="square" style="--x: {item.x}px; --y: {item.y}px;">
+                    <span class="primary" draggable="false">
+                        {CreeFormatTranslate(word.primaryText, { ...UserPref })}
+                    </span>
 
-                <span class="secondary" draggable="false">
-                    {word.descriptions[0] ?? ""}
-                </span>
+                    <span class="secondary" draggable="false">
+                        {word.descriptions[0] ?? ""}
+                    </span>
 
-                <div class="desc" draggable="false">
-                    {#each word.descriptions as desc}
-                        <span class="secondary">
-                            {desc}
-                        </span>
-                    {/each}
+                    <div class="desc" draggable="false">
+                        {#each word.descriptions as desc}
+                            <span class="secondary">
+                                {desc}
+                            </span>
+                        {/each}
+                    </div>
+                    <a href="/def/{id}" draggable="false">
+                        <button>Read More</button>
+                    </a>
                 </div>
-                <a href="/def/{id}" draggable="false">
-                    <button>Read More</button>
-                </a>
-            </div>
-        {/each}
+            {/each}
         </div>
     {/if}
 </div>

@@ -1,5 +1,5 @@
 import { simulate, updateObjs, type SimObj } from "$lib/components/graph/simulations.svelte";
-import { Vector2 } from "$lib/components/graph/vector2";
+import { toGlobalSpace, Vector2 } from "$lib/components/graph/vector2";
 
 type Items = Record<string, { x: number, y: number }>;
 type Lines = Record<string, { x: number, y: number, angle: number, length: number }>
@@ -90,7 +90,10 @@ export class GraphController {
     }
 
 
-    lastPoint = Vector2.ONE;
+    lastPoint = Vector2.ZERO;
+    initialTouchDist = 0;
+    initialZoom = 1;
+
 
 
     setHover(element: HTMLElement) {
@@ -124,10 +127,14 @@ export class GraphController {
     initEvents() {
         this.container?.addEventListener("wheel", (e) => {
             e.preventDefault();
-            this.zoom = Math.min(3, Math.max(0.25, this.zoom - e.deltaY * 0.001));
-        }, { passive: false });
+            this.zoomAtPoint(Vector2.of(e.offsetX, e.offsetY), this.zoom - (this.zoom * Math.sign(e.deltaY) * 0.05));
+        });
 
-        this.container?.addEventListener("pointerdown", (e) => {
+        this.container?.addEventListener("mousedown", (e) => {
+            if (!this.lastPoint.eq(Vector2.ZERO)) {
+                return;
+            }
+
             this.lastPoint = Vector2.of(e.screenX, e.screenY);
             if (e.target == this.container) {
                 this.clearHover();
@@ -145,7 +152,7 @@ export class GraphController {
         })
 
 
-        this.container?.addEventListener("pointermove", (e) => {
+        this.container?.addEventListener("mousemove", (e) => {
 
             const current = Vector2.of(e.screenX, e.screenY);
             const dx = current.x - this.lastPoint.x;
@@ -156,23 +163,120 @@ export class GraphController {
             }
 
             if (!this.focusedItem) {
-                this.camera.x -= dx;
-                this.camera.y -= dy;
+                this.pan(Vector2.of(dx, dy));
             } else {
-                this.focusedItem.pos.addip(dx, dy);
+                this.focusedItem.pos.addip(dx / this.zoom, dy / this.zoom);
                 this.pauseSim = false; // important!
             }
 
             this.lastPoint = current;
         });
 
-        this.container?.addEventListener("pointerup", (e) => {
+        this.container?.addEventListener("mouseup", (e) => {
             if (this.focusedItem) {
                 this.focusedItem.static = false;
                 this.focusedItem = undefined;
             }
             this.lastPoint = Vector2.ZERO;
-        })
+        });
+
+
+        this.container?.addEventListener("touchstart", (e) => {
+            const rect = this.container?.getBoundingClientRect()!;
+
+            if (e.touches.length == 1) {
+                const touch = e.touches[0];
+                this.lastPoint = Vector2.of(touch.clientX - rect.left, touch.clientY - rect.top);
+
+                const element = e.target as HTMLElement;
+                const obj = this.objs.get(element.id);
+
+                if (obj) {
+                    this.setHover(element);
+                    this.focusedItem = obj;
+                    obj.static = true;
+                }
+
+            } else
+                if (e.touches.length == 2) {
+                    const touch1 = Vector2.of(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
+                    const touch2 = Vector2.of(e.touches[1].clientX - rect.left, e.touches[1].clientY - rect.top);
+
+                    this.initialTouchDist = touch1.distTo(touch2);
+                    this.initialZoom = this.zoom;
+                    this.lastPoint = Vector2.midPoint(touch1, touch2); // use the midpoint as the last point for panning
+                }
+        });
+
+        this.container?.addEventListener("touchmove", (e) => {
+            e.preventDefault();
+            const rect = this.container?.getBoundingClientRect()!;
+
+            if (e.touches.length == 1) {
+                const touch = e.touches[0];
+                const current = Vector2.of(touch.clientX - rect.left, touch.clientY - rect.top);
+                const delta = current.sub(this.lastPoint);
+
+                if (this.focusedItem) {
+                    this.focusedItem.pos.addip(delta.x / this.zoom, delta.y / this.zoom);
+                    this.pauseSim = false; // important!
+                } else {
+                    this.pan(delta);
+                }
+
+                this.lastPoint = current;
+            } else if (e.touches.length == 2) {
+                const touch1 = Vector2.of(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
+                const touch2 = Vector2.of(e.touches[1].clientX - rect.left, e.touches[1].clientY - rect.top);
+
+                const newDist = touch1.distTo(touch2);
+                const currentPoint = Vector2.midPoint(touch1, touch2); // update the last point to the new midpoint for smoother panning
+
+                this.zoomAtPoint(currentPoint, this.initialZoom * (newDist / this.initialTouchDist));
+
+                this.pan(currentPoint.sub(this.lastPoint));
+                this.lastPoint = currentPoint;
+            }
+        }, {
+            passive: false
+        });
+
+
+        this.container?.addEventListener("touchend", (e) => {
+            if (e.touches.length == 0) {
+                this.lastPoint = Vector2.ZERO;
+                this.initialTouchDist = 0;
+
+                if (this.focusedItem) {
+                    this.focusedItem.static = false;
+                    this.focusedItem = undefined;
+                }
+            } else if (e.touches.length == 1) {
+                const rect = this.container?.getBoundingClientRect()!;
+                const touch = e.touches[0];
+                this.lastPoint = Vector2.of(touch.clientX - rect.left, touch.clientY - rect.top);
+                this.initialZoom = this.zoom; // reset initial zoom in case user lifts one finger during a pinch
+            }
+        });
+    }
+
+    zoomAtPoint(p: Vector2, newZoom: number) {
+        if (newZoom > 3 ||
+            newZoom < 0.25) {
+            return;
+        }
+
+        const point = toGlobalSpace(p, Vector2.of(this.camera.x, this.camera.y), this.zoom);
+
+
+        this.camera.x = point.x - (p.x / newZoom);
+        this.camera.y = point.y - (p.y / newZoom);
+        this.zoom = newZoom;
+    }
+
+    pan(delta: Vector2) {
+        this.camera.x -= delta.x / this.zoom;
+        this.camera.y -= delta.y / this.zoom;
     }
 
     update(t: number) {
