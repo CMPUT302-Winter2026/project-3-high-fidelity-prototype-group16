@@ -2,6 +2,14 @@
 
 A Cree/English dictionary web app inspired by itwewina, designed to make vocabulary lookup and exploration easier.
 
+## Members
+* Rheanna Glass (rglass)
+* Shubham Jain (Jain8)
+* Cameron Larson (clarson1)
+* Anwen Li (anwen1)
+* Noah Silva (nmsilva)
+* Ray Gong (rgong2)
+
 ## Live Deployment
 
 - Production URL: https://vocab-explorer.vercel.app/
