@@ -67,14 +67,16 @@
 		flex-wrap: wrap;
 
 		position: sticky;
-
 		background-color: var(--bk);
 
 		border-bottom: 2px solid transparent;
 		transition: border-color 200ms ease-out;
 
 		padding: 0rem 2rem;
+		padding-bottom: 1rem;
 		z-index: 100;
+
+		transform: translate(0, -1px);
 	}
 
 	.langOpt {
@@ -99,5 +101,6 @@
 		gap: 1rem;
 
 		padding: 2rem;
+		padding-top: 1rem;
 	}
 </style>

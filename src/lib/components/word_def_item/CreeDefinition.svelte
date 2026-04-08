@@ -157,7 +157,7 @@
 		width: auto;
 		height: 2px;
 		background-color: var(--fg0);
-		margin: 0.25rem 0;
+		margin: 0.5rem 0;
 	}
 
 	.detailContent {
