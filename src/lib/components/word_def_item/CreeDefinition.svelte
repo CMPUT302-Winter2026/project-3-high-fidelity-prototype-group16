@@ -121,6 +121,7 @@
 	.title {
 		font-size: larger;
 		display: block;
+		line-height: 1.25rem;
 	}
 
 	.metaRow {
