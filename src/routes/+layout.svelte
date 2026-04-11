@@ -10,19 +10,20 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<div id="wrapper">
+<div class="wrapper">
 	<div
-		id="content"
+		class="content"
 		onscroll={(e) => {
 			UiStates.scrollY = (e.target as HTMLElement).scrollTop;
 		}}
+		id="main-layout"
 	>
 		{@render children()}
 	</div>
 </div>
 
 <style>
-	#wrapper {
+	.wrapper {
 		position: relative;
 		display: flex;
 		justify-content: center;
@@ -31,7 +32,7 @@
 		width: 100dvw;
 	}
 
-	#content {
+	.content {
 		position: relative;
 		height: 100dvh;
 		width: 100dvw;

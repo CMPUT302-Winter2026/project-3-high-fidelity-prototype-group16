@@ -17,7 +17,7 @@
 </script>
 
 {#snippet Missing()}
-	<span style="padding: 0.5rem; font-size: smaller;"
+	<span style="padding: 0.5rem; font-size: smaller;" class="reportLabel"
 		>Report a missing word?
 		<a href="/missing/report#{text}">
 			<PushButton
@@ -53,5 +53,10 @@
 />
 
 <style>
-	/* CSS */
+	.reportLabel {
+		display: inline-flex;
+		justify-content: space-around;
+		width: 100%;
+		align-items: center;
+	}
 </style>

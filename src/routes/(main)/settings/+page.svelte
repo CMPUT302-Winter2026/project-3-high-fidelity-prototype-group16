@@ -1,15 +1,16 @@
 <script lang="ts">
     import { CreeDialects, UserPref } from "$lib/assets/shared_states/userPref.svelte";
     import ABToggle from "$lib/components/ABToggle.svelte";
+    import Portal from "$lib/components/Portal.svelte";
     import Toggle from "$lib/components/Toggle.svelte";
+    import { fly } from "svelte/transition";
 
     let showToast = $state(false);
     let toastTimeout: ReturnType<typeof setTimeout>;
     let initialized = false;
 
     $effect(() => {
-        JSON.stringify(UserPref);
-
+        const r = { ...UserPref }; // subscribe to changes
         if (!initialized) {
             initialized = true;
             return;
@@ -48,9 +49,11 @@
     </div>
 </div>
 
-{#if showToast}
-    <div class="toast">Settings saved</div>
-{/if}
+<Portal targetId="main-layout">
+    {#if showToast}
+        <div class="toast" transition:fly={{ y: 50, duration: 250 }}>Settings saved</div>
+    {/if}
+</Portal>
 
 <style>
     .container {
@@ -64,10 +67,9 @@
     }
 
     .toast {
-        position: fixed;
-        bottom: 2rem;
+        position: absolute;
+        bottom: 4rem;
         left: 50%;
-        transform: translateX(-50%);
 
         background-color: var(--fg0);
         color: var(--bk);
@@ -77,11 +79,7 @@
         border-radius: 8px;
 
         pointer-events: none;
-        animation: fadein 200ms ease-out;
-    }
 
-    @keyframes fadein {
-        from { opacity: 0; transform: translateX(-50%) translateY(6px); }
-        to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+        transform: translateX(-50%);
     }
 </style>

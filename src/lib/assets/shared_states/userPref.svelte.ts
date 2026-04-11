@@ -23,7 +23,7 @@ export const UserPref = $state<{
 
 
 $effect.root(() => {
-	$effect(() => {
+	$effect.pre(() => {
 		const local = localStorage.getItem("userPref");
 		if (local) {
 			try {

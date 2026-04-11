@@ -5,7 +5,7 @@
     let text: string = $state("");
 </script>
 
-<div class="mainLayout">
+<div class="mainLayout" >
     <h1>Vocab Explorer</h1>
     <CreeSearchComp />
 
@@ -27,7 +27,7 @@
 
         padding: 3rem;
         padding-top: 5rem;
-        min-height: calc(100dvh - 3.5rem);
+        min-height: calc(100% - 3.5rem);
     }
 
     h3 {
