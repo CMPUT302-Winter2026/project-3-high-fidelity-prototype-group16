@@ -70,6 +70,7 @@ npm run dev
 
 - GitHub Copilot was used for some styling and component creation.
 - Cursor was used for parts of web scraping and data-source preparation.
+- Claude code was used to pinpoint exact functions and their usages in the codebase.
 
 ## Sources and References
 
