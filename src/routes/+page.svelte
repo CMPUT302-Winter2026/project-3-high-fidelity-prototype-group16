@@ -1,5 +1,6 @@
 <script lang="ts">
     import CreeSearchComp from "$lib/components/CreeSearchComp.svelte";
+    import PushButton from "$lib/components/PushButton.svelte";
 
     let text: string = $state("");
 </script>
@@ -11,6 +12,10 @@
     {#if !text}
         <h3>Type an English or Cree word to get started!</h3>
     {/if}
+
+    <a href="/missing/report" class="report-link">
+        <PushButton>Report a Missing Word</PushButton>
+    </a>
 </div>
 
 <style>
@@ -22,10 +27,15 @@
 
         padding: 3rem;
         padding-top: 5rem;
+        min-height: calc(100dvh - 3.5rem);
     }
 
     h3 {
         text-align: center;
         width: 80%;
+    }
+
+    .report-link {
+        margin-top: auto;
     }
 </style>

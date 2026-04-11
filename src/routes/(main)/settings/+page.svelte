@@ -3,7 +3,22 @@
     import ABToggle from "$lib/components/ABToggle.svelte";
     import Toggle from "$lib/components/Toggle.svelte";
 
-    // Code
+    let showToast = $state(false);
+    let toastTimeout: ReturnType<typeof setTimeout>;
+    let initialized = false;
+
+    $effect(() => {
+        JSON.stringify(UserPref);
+
+        if (!initialized) {
+            initialized = true;
+            return;
+        }
+
+        clearTimeout(toastTimeout);
+        showToast = true;
+        toastTimeout = setTimeout(() => (showToast = false), 2500);
+    });
 </script>
 
 <div class="container">
@@ -33,6 +48,10 @@
     </div>
 </div>
 
+{#if showToast}
+    <div class="toast">Settings saved</div>
+{/if}
+
 <style>
     .container {
         display: flex;
@@ -42,5 +61,27 @@
 
         padding: 2rem;
         padding-top: 0;
+    }
+
+    .toast {
+        position: fixed;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+
+        background-color: var(--fg0);
+        color: var(--bk);
+        font-size: 0.875rem;
+
+        padding: 0.5rem 1.25rem;
+        border-radius: 8px;
+
+        pointer-events: none;
+        animation: fadein 200ms ease-out;
+    }
+
+    @keyframes fadein {
+        from { opacity: 0; transform: translateX(-50%) translateY(6px); }
+        to   { opacity: 1; transform: translateX(-50%) translateY(0); }
     }
 </style>
