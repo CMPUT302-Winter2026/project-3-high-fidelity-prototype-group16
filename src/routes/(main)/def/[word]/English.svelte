@@ -63,7 +63,7 @@
 	}
 
 	.title {
-		align-items: center;
+		align-items: baseline;
 		flex-wrap: wrap;
 
 		position: sticky;
