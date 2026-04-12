@@ -11,6 +11,7 @@
     import ImageModal from "$lib/components/ImageModal.svelte";
     import IconButton from "$lib/components/IconButton.svelte";
     import PushButton from "$lib/components/PushButton.svelte";
+    import CreeWordDetails from "$lib/components/word_def_item/CreeWordDetails.svelte";
 
     interface Props {
         word: CreeWord;
@@ -101,6 +102,8 @@
         </PushButton>
     </a>
 
+    <CreeWordDetails {word} />
+
     <ImageModal
         open={showImageModal}
         onclose={closeImageModal}
@@ -110,19 +113,6 @@
 </div>
 
 <style>
-    button {
-        display: flex;
-        align-items: center;
-        font-size: large;
-
-        width: fit-content;
-    }
-
-    button > img {
-        height: 2rem;
-        width: fit-content;
-    }
-
     h1 {
         margin: 0;
         line-height: 4rem;

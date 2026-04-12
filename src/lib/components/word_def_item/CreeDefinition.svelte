@@ -7,6 +7,7 @@
 	import ImageModal from "$lib/components/ImageModal.svelte";
 	import IconButton from "$lib/components/IconButton.svelte";
 	import PushButton from "$lib/components/PushButton.svelte";
+	import CreeWordDetails from "$lib/components/word_def_item/CreeWordDetails.svelte";
 
 	interface Props {
 		index: number;
@@ -16,7 +17,6 @@
 	let { creeWord, index }: Props = $props();
 
 	let showDetail = $state(false);
-	let contentHeight = $state(0);
 	let dialect = $state(UserPref.dialect);
 	const dummyImages = ["/icons/photo.svg", "/icons/photo.svg", "/icons/photo.svg"];
 	type ModalPageState = App.PageState & { imageModalWord?: string };
@@ -107,22 +107,7 @@
 		</PushButton>
 	</div>
 
-	<div class="detailContainer" style:--contentHeight={contentHeight} class:showDetail>
-		<div class="detailContent" bind:clientHeight={contentHeight}>
-			<div class="divider"></div>
-			<span>{creeWord.detailedWordType}</span>
-
-			<div class="morphsContainer">
-				{#each creeWord.morphs as morph (`${morph.semantic}-${morph.creeMorph}`)}
-					<span style="grid-column: 1; text-align: right;">{morph.semantic}</span>
-
-					<span style="grid-column: 2; text-align: left;"
-						>{CreeFormatTranslate(morph.creeMorph, { ...UserPref })}</span
-					>
-				{/each}
-			</div>
-		</div>
-	</div>
+	<CreeWordDetails word={creeWord} expanded={showDetail} />
 
 	<ImageModal
 		open={showImageModal}
@@ -185,80 +170,6 @@
 		margin-top: 0.25rem;
 
 		justify-content: space-between;
-	}
-
-	.divider {
-		width: auto;
-		height: 2px;
-		background-color: var(--fg0);
-		margin: 0.5rem 0;
-	}
-
-	.detailContent {
-		display: flex;
-		flex-direction: column;
-		position: relative;
-		padding-top: 0.5rem;
-	}
-
-	.detailContainer {
-		height: fit-content;
-		max-height: 0;
-
-		transition: max-height 200ms ease-out;
-		overflow: hidden;
-	}
-
-	.detailContainer.showDetail {
-		max-height: calc(var(--contentHeight) * 1px);
-	}
-
-	.morphsContainer {
-		font-size: smaller;
-		margin-top: 0.5rem;
-
-		max-width: 100%;
-		display: grid;
-		grid-template-columns: auto-fill auto-fill;
-		gap: 1rem;
-	}
-
-	button {
-		display: flex;
-		align-items: center;
-		flex-direction: row;
-		width: fit-content;
-
-		border: 1px solid var(--lightGrey);
-		transition: border-color 200ms ease-out;
-		background-color: transparent;
-
-		padding: 0.25rem;
-	}
-
-	button:hover {
-		border-color: var(--black);
-	}
-
-	button > img {
-		height: auto;
-		width: 1.25rem;
-	}
-
-	button.iconBtn {
-		width: 1.75rem;
-		height: 1.75rem;
-	}
-
-	.detailToggleBtn {
-		display: flex;
-		align-items: center;
-		gap: 0.25rem;
-		font-size: small;
-		width: fit-content;
-		height: fit-content;
-		padding: 0.2rem 0.4rem;
-		white-space: nowrap;
 	}
 
 	.chevron {
