@@ -1,11 +1,14 @@
 <script lang="ts">
     import type { CreeWord } from "$lib/assets/content/dummy/types";
+    import { pushState } from "$app/navigation";
+    import { page } from "$app/state";
     import { CreeFormatTranslate } from "$lib/assets/cree_util/cree_format_translate";
     import {
         CreeDialects,
         UserPref,
         type CreeDialect,
     } from "$lib/assets/shared_states/userPref.svelte";
+    import ImageModal from "$lib/components/ImageModal.svelte";
     import IconButton from "$lib/components/IconButton.svelte";
     import PushButton from "$lib/components/PushButton.svelte";
 
@@ -16,6 +19,29 @@
     let { word }: Props = $props();
 
     let dialect: CreeDialect = $state(UserPref.dialect);
+    const dummyImages = ["/icons/photo.svg", "/icons/photo.svg", "/icons/photo.svg"];
+    type ModalPageState = App.PageState & { imageModalWord?: string };
+    let modalState = $derived(page.state as ModalPageState);
+    let showImageModal = $derived(modalState.imageModalWord === word.primaryText);
+
+    function openImageModal() {
+        if (showImageModal) {
+            return;
+        }
+
+        pushState("", {
+            ...modalState,
+            imageModalWord: word.primaryText,
+        });
+    }
+
+    function closeImageModal() {
+        if (!showImageModal) {
+            return;
+        }
+
+        history.back();
+    }
 </script>
 
 <div class="title">
@@ -27,7 +53,7 @@
         <div class="dialectWrapper">
             <label for="dialect">Dialects</label>
             <select name="Dialect Switcher" id="dialect" bind:value={dialect}>
-                {#each CreeDialects as d}
+                {#each CreeDialects as d (d)}
                     <option> {d}</option>
                 {/each}
             </select>
@@ -53,14 +79,14 @@
             <img src="/icons/speaker.svg" alt="speaker icon button" />
         </IconButton>
 
-        <IconButton class="iconBtn">
+        <IconButton class="iconBtn" onclick={openImageModal}>
             <img src="/icons/photo.svg" alt=" icon button" />
         </IconButton>
     </div>
 </div>
 
 <div class="content">
-    {#each word.descriptions as desc, idx}
+    {#each word.descriptions as desc, idx (`${idx}-${desc}`)}
         <div class="wordDesc">
             <h3>{idx + 1}. {desc}</h3>
         </div>
@@ -74,6 +100,13 @@
             Related Words
         </PushButton>
     </a>
+
+    <ImageModal
+        open={showImageModal}
+        onclose={closeImageModal}
+        subjectLabel={CreeFormatTranslate(word.primaryText, { ...UserPref })}
+        images={dummyImages}
+    />
 </div>
 
 <style>

@@ -12,7 +12,7 @@
 
 <div class="wrapper">
 	<div
-		class="content"
+		class="content thinScroll"
 		onscroll={(e) => {
 			UiStates.scrollY = (e.target as HTMLElement).scrollTop;
 		}}

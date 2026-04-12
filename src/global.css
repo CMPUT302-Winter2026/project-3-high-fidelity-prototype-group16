@@ -94,6 +94,29 @@ select {
     height: 1.75rem;
 }
 
+.thinScroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--hl) var(--bg0);
+}
+
+.thinScroll::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.thinScroll::-webkit-scrollbar-track {
+    background-color: var(--bg0);
+}
+
+.thinScroll::-webkit-scrollbar-thumb {
+    background-color: var(--hl);
+    border-radius: 999px;
+}
+
+.thinScroll::-webkit-scrollbar-thumb:hover {
+    background-color: var(--hl0);
+}
+
 
 @font-face {
     font-family: CanadianSyllabic;

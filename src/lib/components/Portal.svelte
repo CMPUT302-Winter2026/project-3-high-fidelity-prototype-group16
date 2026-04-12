@@ -1,6 +1,6 @@
 <script lang="ts">
     import { mount, onMount, unmount } from "svelte";
-    import type { Component, Snippet } from "svelte";
+    import type { Snippet } from "svelte";
 
     interface Props {
         targetId: string;
@@ -8,8 +8,6 @@
     }
 
     let { targetId, children }: Props = $props();
-
-    $inspect(targetId);
 
     onMount(() => {
         const targetElement = document.getElementById(targetId);

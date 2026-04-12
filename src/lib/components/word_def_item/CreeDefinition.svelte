@@ -1,7 +1,10 @@
 <script lang="ts">
 	import type { CreeWord } from "$lib/assets/content/dummy/types";
+	import { pushState } from "$app/navigation";
+	import { page } from "$app/state";
 	import { CreeFormatTranslate } from "$lib/assets/cree_util/cree_format_translate";
 	import { UserPref } from "$lib/assets/shared_states/userPref.svelte";
+	import ImageModal from "$lib/components/ImageModal.svelte";
 	import IconButton from "$lib/components/IconButton.svelte";
 	import PushButton from "$lib/components/PushButton.svelte";
 
@@ -15,6 +18,29 @@
 	let showDetail = $state(false);
 	let contentHeight = $state(0);
 	let dialect = $state(UserPref.dialect);
+	const dummyImages = ["/icons/photo.svg", "/icons/photo.svg", "/icons/photo.svg"];
+	type ModalPageState = App.PageState & { imageModalWord?: string };
+	let modalState = $derived(page.state as ModalPageState);
+	let showImageModal = $derived(modalState.imageModalWord === creeWord.primaryText);
+
+	function openImageModal() {
+		if (showImageModal) {
+			return;
+		}
+
+		pushState("", {
+			...modalState,
+			imageModalWord: creeWord.primaryText,
+		});
+	}
+
+	function closeImageModal() {
+		if (!showImageModal) {
+			return;
+		}
+
+		history.back();
+	}
 </script>
 
 <div class="container" class:cree={UserPref.format === "Syllabics"}>
@@ -35,14 +61,14 @@
 			>
 				<img src="/icons/speaker.svg" alt="speaker" />
 			</IconButton>
-			<IconButton>
+			<IconButton onclick={openImageModal}>
 				<img src="/icons/photo.svg" alt="" />
 			</IconButton>
 		</div>
 	</div>
 
 	<ul>
-		{#each creeWord.descriptions as desc}
+		{#each creeWord.descriptions as desc, descIdx (`${desc}-${descIdx}`)}
 			<li>{desc}</li>
 		{/each}
 	</ul>
@@ -87,7 +113,7 @@
 			<span>{creeWord.detailedWordType}</span>
 
 			<div class="morphsContainer">
-				{#each creeWord.morphs as morph}
+				{#each creeWord.morphs as morph (`${morph.semantic}-${morph.creeMorph}`)}
 					<span style="grid-column: 1; text-align: right;">{morph.semantic}</span>
 
 					<span style="grid-column: 2; text-align: left;"
@@ -97,6 +123,13 @@
 			</div>
 		</div>
 	</div>
+
+	<ImageModal
+		open={showImageModal}
+		onclose={closeImageModal}
+		subjectLabel={CreeFormatTranslate(creeWord.primaryText, { ...UserPref })}
+		images={dummyImages}
+	/>
 </div>
 
 <style>
