@@ -43,6 +43,7 @@
         onkeypress={(e) => {
             if (e.key === "enter") onsubmit();
         }}
+        
         onfocus={() => {
             focused = true;
         }}

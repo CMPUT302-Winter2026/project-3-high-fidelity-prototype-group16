@@ -7,7 +7,7 @@
 
 	const fuse = new Fuse([...Object.values(creeWords), ...Object.values(englishWords)], {
 		keys: ["primaryText", "descriptions"],
-		isCaseSensitive: true,
+		isCaseSensitive: false,
 		ignoreDiacritics: true,
 		threshold: 0.45,
 	});
@@ -30,27 +30,41 @@
 	</span>
 {/snippet}
 
-<Search
-	bind:focused
-	bind:text
+<form
 	style="width:100%;
 	max-width: 300px;"
-	autoCompleteProvider={(key) => {
-		const searchRes = fuse.search(key, {
-			limit: 10,
-		});
+	action=""
+	onsubmit={(e) => {
+		e.preventDefault();
 
-		return searchRes.map((item) => item.item.primaryText);
-	}}
-	onsubmit={() => {
-		if (!(text in creeWords) && !(text in englishWords)) {
+		const t = text.trim().toLowerCase();
+		if (!(t in creeWords) && !(t in englishWords)) {
 			alert("Word not found!");
 		} else {
-			goto(`/def/${text}`);
+			goto(`/def/${t}`);
 		}
 	}}
-	noResTemplate={Missing}
-/>
+>
+	<Search
+		bind:focused
+		bind:text
+		autoCompleteProvider={(key) => {
+			const searchRes = fuse.search(key, {
+				limit: 10,
+			});
+
+			return searchRes.map((item) => item.item.primaryText);
+		}}
+		onsubmit={() => {
+			if (!(text in creeWords) && !(text in englishWords)) {
+				alert("Word not found!");
+			} else {
+				goto(`/def/${text}`);
+			}
+		}}
+		noResTemplate={Missing}
+	/>
+</form>
 
 <style>
 	.reportLabel {
