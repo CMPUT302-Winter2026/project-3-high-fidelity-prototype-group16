@@ -19,7 +19,7 @@
 
     let { word }: Props = $props();
 
-    let dialect: CreeDialect = $state(UserPref.dialect);
+
     const dummyImages = ["/icons/photo.svg", "/icons/photo.svg", "/icons/photo.svg"];
     type ModalPageState = App.PageState & { imageModalWord?: string };
     let modalState = $derived(page.state as ModalPageState);
@@ -53,7 +53,7 @@
     <div class="toolButtons">
         <div class="dialectWrapper">
             <label for="dialect">Dialects</label>
-            <select name="Dialect Switcher" id="dialect" bind:value={dialect}>
+            <select name="Dialect Switcher" id="dialect" bind:value={UserPref.dialect}>
                 {#each CreeDialects as d (d)}
                     <option> {d}</option>
                 {/each}
@@ -73,7 +73,7 @@
         <IconButton
             onclick={() => {
                 alert(
-                    `Mock audio playback, Chosen dialect: ${dialect}, chosen word ${word.primaryText}`,
+                    `Mock audio playback, Chosen dialect: ${UserPref.dialect}, chosen word ${word.primaryText}`,
                 );
             }}
         >

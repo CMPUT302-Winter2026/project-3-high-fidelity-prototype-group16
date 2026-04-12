@@ -17,7 +17,7 @@
 	let { creeWord, index }: Props = $props();
 
 	let showDetail = $state(false);
-	let dialect = $state(UserPref.dialect);
+
 	const dummyImages = ["/icons/photo.svg", "/icons/photo.svg", "/icons/photo.svg"];
 	type ModalPageState = App.PageState & { imageModalWord?: string };
 	let modalState = $derived(page.state as ModalPageState);
@@ -56,7 +56,7 @@
 			<IconButton
 				onclick={() =>
 					alert(
-						`Mock audio playback, Chosen dialect: ${dialect}, chosen word ${creeWord.primaryText}`,
+						`Mock audio playback, Chosen dialect: ${UserPref.dialect}, chosen word ${creeWord.primaryText}`,
 					)}
 			>
 				<img src="/icons/speaker.svg" alt="speaker" />

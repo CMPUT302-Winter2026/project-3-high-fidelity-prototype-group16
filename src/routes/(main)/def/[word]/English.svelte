@@ -16,7 +16,7 @@
 	const { word }: Props = $props();
 
 	let sticky = $derived(UiStates.scrollY > UiStates.topbarHeight);
-	let dialect: CreeDialect = $state(UserPref.dialect);
+
 </script>
 
 <div class="hor title" style="top: {UiStates.topbarHeight}px;" class:sticky>
@@ -35,7 +35,7 @@
 		</IconButton>
 		<div class="dialectWrapper">
 			<label for="dialect">Dialects</label>
-			<select name="Dialect Switcher" id="dialect" bind:value={dialect}>
+			<select name="Dialect Switcher" id="dialect" bind:value={UserPref.dialect}>
 				{#each CreeDialects as d}
 					<option> {d}</option>
 				{/each}
