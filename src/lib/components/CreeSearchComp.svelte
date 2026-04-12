@@ -21,6 +21,7 @@
 		>Report a missing word?
 		<a href="/missing/report#{text}">
 			<PushButton
+				type="button"
 				onclick={() => {
 					focused = false;
 				}}
