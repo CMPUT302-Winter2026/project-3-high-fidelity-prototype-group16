@@ -10,7 +10,7 @@
     let initialized = false;
 
     $effect(() => {
-        const r = { ...UserPref }; // subscribe to changes
+        void JSON.stringify(UserPref); // subscribe to all changes
         if (!initialized) {
             initialized = true;
             return;
@@ -32,7 +32,9 @@
 
     <div>
         <label for="">Long Vowel</label>
-        <ABToggle A={"Circumflex"} B={"Macron"} bind:value={UserPref.longVowelRep} />
+        {#snippet circumflexLabel()}Circumflex <span class="symbol">ˆ</span>{/snippet}
+        {#snippet macronLabel()}Macron <span class="symbol">¯</span>{/snippet}
+        <ABToggle A={"Circumflex"} B={"Macrons"} labelA={circumflexLabel} labelB={macronLabel} minWidth={"220px"} bind:value={UserPref.longVowelRep} />
     </div>
 
     <div>
@@ -56,6 +58,11 @@
 </Portal>
 
 <style>
+    :global(.symbol) {
+        font-size: 1.3em;
+        line-height: 1;
+    }
+
     .container {
         display: flex;
         flex-direction: column;

@@ -1,11 +1,17 @@
 <script lang="ts">
     import CreeSearchComp from "$lib/components/CreeSearchComp.svelte";
     import PushButton from "$lib/components/PushButton.svelte";
+    import IconButton from "$lib/components/IconButton.svelte";
 
     let text: string = $state("");
 </script>
 
-<div class="mainLayout" >
+<div class="mainLayout">
+    <a href="/settings" class="settings-link">
+        <IconButton>
+            <img src="/icons/setting.svg" alt="Settings" />
+        </IconButton>
+    </a>
     <h1>Vocab Explorer</h1>
     <CreeSearchComp />
 
@@ -27,7 +33,13 @@
 
         padding: 3rem;
         padding-top: 5rem;
-        min-height: calc(100% - 3.5rem);
+        min-height: calc(100dvh - 3.5rem);
+    }
+
+    .settings-link {
+        position: absolute;
+        top: 1.25rem;
+        right: 1.25rem;
     }
 
     h3 {

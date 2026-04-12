@@ -1,32 +1,35 @@
 <script lang="ts">
+    import type { Snippet } from "svelte";
+
     interface Props {
         A: string;
         B: string;
         value: string;
+        labelA?: string | Snippet;
+        labelB?: string | Snippet;
+        minWidth?: string;
     }
 
-    let { A, B, value = $bindable() }: Props = $props();
+    let { A, B, value = $bindable(), labelA, labelB, minWidth = "150px" }: Props = $props();
 </script>
 
-<div class="container">
+<div class="container" style="min-width: {minWidth}">
     <button
         type="button"
         class:selected={value === A}
         class="btn A"
-        onclick={() => {
-            value = A;
-        }}
+        onclick={() => { value = A; }}
     >
-        {A}
+        {#if typeof labelA === "function"}{@render labelA()}{:else}{labelA ?? A}{/if}
     </button>
     <button
         type="button"
         class:selected={value === B}
         class="btn B"
-        onclick={() => {
-            value = B;
-        }}>{B}</button
+        onclick={() => { value = B; }}
     >
+        {#if typeof labelB === "function"}{@render labelB()}{:else}{labelB ?? B}{/if}
+    </button>
 </div>
 
 <style>
